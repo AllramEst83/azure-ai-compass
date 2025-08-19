@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure AI Compass: The Complete Customization Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral -->
+    <!-- Application Structure Plan: The SPA has been expanded to incorporate the full depth of the source research document while maintaining its task-oriented structure. The 'Home' section now includes foundational concepts like the ULM, the 'Customization Imperative', and programmatic control. The 'STT' and 'NMT' sections are enhanced with comprehensive, searchable reference tables for all data types and detailed error mitigation guides. The interactive problem-solvers now provide deeper explanations. The 'Strategy' section is completely overhauled with detailed content on the retraining cycle, model lifecycle, a full comparative analysis, and a strategic roadmap for developers. This structure was chosen to layer information, allowing users to get quick answers from the interactive tools or dive deep into the reference materials, all within the same logical tab. -->
+    <!-- Visualization & Content Choices: Report Info: All tables (2.1, 2.2, 3.1, 3.2, 4.1) -> Goal: Provide comprehensive reference -> Presentation: Interactive HTML tables with search/filter -> Interaction: User can filter tables to find specific data types or error strategies -> Justification: Makes dense reference material highly accessible and usable. Report Info: Detailed explanations of WER/BLEU -> Goal: Educate on metrics -> Presentation: Expanded text sections next to charts -> Interaction: None -> Justification: Provides necessary context for the visualizations. Report Info: Data filtering pipeline, programmatic control -> Goal: Inform on advanced topics -> Presentation: Dedicated content cards/sections -> Interaction: None -> Justification: Presents key operational details in a digestible format. All charts remain Canvas-based via Chart.js. No SVG/Mermaid is used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-button.active {
+            background-color: #0f766e; /* teal-700 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .problem-button.active {
+            background-color: #0d9488; /* teal-600 */
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .content-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl md:text-2xl font-bold text-teal-800">Azure AI Compass</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <button onclick="showSection('intro')" class="nav-button text-slate-700 hover:bg-teal-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</button>
+                        <button onclick="showSection('stt')" class="nav-button text-slate-700 hover:bg-teal-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Custom Speech (STT)</button>
+                        <button onclick="showSection('nmt')" class="nav-button text-slate-700 hover:bg-teal-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Custom Translator (NMT)</button>
+                        <button onclick="showSection('strategy')" class="nav-button text-slate-700 hover:bg-teal-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Strategy & Lifecycle</button>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                     <select onchange="showSection(this.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5">
+                        <option value="intro">Home</option>
+                        <option value="stt">STT</option>
+                        <option value="nmt">NMT</option>
+                        <option value="strategy">Strategy</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <section id="intro" class="app-section space-y-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Go Beyond Baseline Models</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This guide provides a comprehensive, interactive overview of customizing Azure's Speech-to-Text (STT) and Neural Machine Translation (NMT) services. Learn to diagnose common issues and apply targeted, data-driven solutions to build high-accuracy, domain-specific AI models.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg content-card">
+                    <h3 class="text-xl font-semibold mb-3 text-slate-800">The Customization Imperative</h3>
+                    <p class="text-slate-600">Azure's Universal Language Model (ULM) offers strong general performance. However, it can falter with domain-specific jargon, accents, or background noise. Customization adapts the base model to your unique acoustic and linguistic data, leading to superior accuracy and a significant competitive advantage.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg content-card">
+                    <h3 class="text-xl font-semibold mb-3 text-slate-800">The Data-Centric Approach</h3>
+                    <p class="text-slate-600">Model performance is more sensitive to data quality than quantity. High-quality data is <strong>Representative</strong> (matches your use case), <strong>Diverse</strong> (covers all expected variations), and <strong>Clean</strong> (free of errors). A smaller, curated dataset often outperforms a larger, uncurated one.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-semibold mb-6 text-center text-slate-800">The Unified Customization Workflow</h3>
+                <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto">Both Custom Speech and Custom Translator follow the same iterative lifecycle. The key is to prepare high-quality, representative data to train, test, and continuously improve your model. This process can be managed via the Speech Studio and Azure AI Foundry portals, or automated via the Speech CLI and REST APIs.</p>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 flex-wrap">
+                    <div class="flex items-center flex-col md:flex-row text-center md:text-left">
+                        <div class="p-4 bg-teal-100 text-teal-800 rounded-full h-16 w-16 flex items-center justify-center font-bold text-2xl mb-2 md:mb-0">1</div>
+                        <div class="md:ml-4">
+                            <h4 class="font-semibold">Project & Data</h4>
+                            <p class="text-sm text-slate-500">Create project, upload data</p>
+                        </div>
+                    </div>
+                    <div class="text-teal-400 text-2xl font-light transform rotate-90 md:rotate-0 mx-2">→</div>
+                    <div class="flex items-center flex-col md:flex-row text-center md:text-left">
+                        <div class="p-4 bg-teal-100 text-teal-800 rounded-full h-16 w-16 flex items-center justify-center font-bold text-2xl mb-2 md:mb-0">2</div>
+                        <div class="md:ml-4">
+                            <h4 class="font-semibold">Train Model</h4>
+                            <p class="text-sm text-slate-500">Fine-tune a base model</p>
+                        </div>
+                    </div>
+                    <div class="text-teal-400 text-2xl font-light transform rotate-90 md:rotate-0 mx-2">→</div>
+                    <div class="flex items-center flex-col md:flex-row text-center md:text-left">
+                        <div class="p-4 bg-teal-100 text-teal-800 rounded-full h-16 w-16 flex items-center justify-center font-bold text-2xl mb-2 md:mb-0">3</div>
+                        <div class="md:ml-4">
+                            <h4 class="font-semibold">Evaluate Model</h4>
+                            <p class="text-sm text-slate-500">Test with WER/BLEU</p>
+                        </div>
+                    </div>
+                     <div class="text-teal-400 text-2xl font-light transform rotate-90 md:rotate-0 mx-2">→</div>
+                    <div class="flex items-center flex-col md:flex-row text-center md:text-left">
+                        <div class="p-4 bg-teal-100 text-teal-800 rounded-full h-16 w-16 flex items-center justify-center font-bold text-2xl mb-2 md:mb-0">4</div>
+                        <div class="md:ml-4">
+                            <h4 class="font-semibold">Deploy Endpoint</h4>
+                            <p class="text-sm text-slate-500">Publish for API use</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stt" class="app-section hidden space-y-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Custom Speech (STT) Problem Solver</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">Select a common transcription issue to see the recommended data-driven solution, key data type details, and an explanation of the relevant evaluation metrics.</p>
+            </div>
+            <div class="flex justify-center flex-wrap gap-2 md:gap-4 p-4 bg-slate-100 rounded-xl">
+                <button class="problem-button stt-problem-btn px-4 py-2 bg-white rounded-lg shadow-sm font-medium transition" data-problem="noise">Acoustic Noise & Accents</button>
+                <button class="problem-button stt-problem-btn px-4 py-2 bg-white rounded-lg shadow-sm font-medium transition" data-problem="jargon">Domain Jargon & Acronyms</button>
+                <button class="problem-button stt-problem-btn px-4 py-2 bg-white rounded-lg shadow-sm font-medium transition" data-problem="format">Poor Readability & Formatting</button>
+            </div>
+            <div id="stt-solution-area" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-semibold mb-4 text-slate-800">STT Data Type Reference</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="p-3 font-semibold text-slate-700">Data Type</th>
+                                <th class="p-3 font-semibold text-slate-700">Primary Function</th>
+                                <th class="p-3 font-semibold text-slate-700">Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stt-data-table-body" class="text-slate-600 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="nmt" class="app-section hidden space-y-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Custom Translator (NMT) Problem Solver</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">Select a common translation issue to see the recommended data-driven solution, key data type details, and an explanation of the BLEU score.</p>
+            </div>
+            <div class="flex justify-center flex-wrap gap-2 md:gap-4 p-4 bg-slate-100 rounded-xl">
+                <button class="problem-button nmt-problem-btn px-4 py-2 bg-white rounded-lg shadow-sm font-medium transition" data-problem="terms">Inconsistent Terminology</button>
+                <button class="problem-button nmt-problem-btn px-4 py-2 bg-white rounded-lg shadow-sm font-medium transition" data-problem="style">Incorrect Tone & Style</button>
+                <button class="problem-button nmt-problem-btn px-4 py-2 bg-white rounded-lg shadow-sm font-medium transition" data-problem="ambiguity">Lexical Ambiguity</button>
+            </div>
+            <div id="nmt-solution-area" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-semibold mb-4 text-slate-800">NMT Data Type Reference</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="p-3 font-semibold text-slate-700">Data Type</th>
+                                <th class="p-3 font-semibold text-slate-700">Primary Function</th>
+                                <th class="p-3 font-semibold text-slate-700">Best Practices</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nmt-data-table-body" class="text-slate-600 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+             <div class="bg-white p-6 rounded-xl shadow-lg content-card">
+                <h3 class="text-xl font-semibold mb-3 text-slate-800">Inside the Black Box: Automated Data Filtering</h3>
+                <p class="text-slate-600">Custom Translator automatically filters your uploaded data. It aligns sentences, removes sentences that are too long (>100 words) or too short (<3 chars), normalizes whitespace and punctuation, and removes invalid characters. To maximize the data used for training, pre-clean your files to align with these rules.</p>
+            </div>
+        </section>
+
+        <section id="strategy" class="app-section hidden space-y-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Strategy & Lifecycle Management</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">Understand the key strategic principles for managing your custom models over time, including the retraining cycle and a direct comparison of STT and NMT capabilities.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg content-card">
+                    <h3 class="text-xl font-semibold mb-3 text-slate-800">The "Retrain, Don't Update" Reality</h3>
+                    <p class="text-slate-600">Azure services do not support true incremental training. To incorporate new data or benefit from newer base models, you must perform a full retraining cycle using a combined dataset of your old and new data. Your MLOps pipelines must be architected for full, periodic retraining, not lightweight updates.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg content-card">
+                    <h3 class="text-xl font-semibold mb-3 text-slate-800">Model & Endpoint Lifecycle</h3>
+                    <p class="text-slate-600">Base models expire for training after ~1 year and for use after ~2 years. Your custom models inherit this lifecycle. To continuously benefit from Microsoft's improvements, you must periodically retrain your custom model on the latest available base model. Check the Speech Studio for specific expiration dates.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-semibold mb-6 text-center text-slate-800">STT vs. NMT: A Comparative Analysis</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="p-3 font-semibold text-slate-700">Feature</th>
+                                <th class="p-3 font-semibold text-slate-700">Custom Speech (STT)</th>
+                                <th class="p-3 font-semibold text-slate-700">Custom Translator (NMT)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparison-table-body" class="text-slate-600 text-sm">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-semibold mb-6 text-slate-800">Developer's Strategic Roadmap</h3>
+                <ol id="roadmap-list" class="list-decimal list-inside space-y-4 text-slate-600"></ol>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-12">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-slate-500">
+            <p class="text-sm">This interactive guide is a derivative work based on the Azure AI Services documentation. All concepts and data types are properties of Microsoft Azure.</p>
+        </div>
+    </footer>
+
+    <script src="./assets/site.js"></script>
+</body>
+</html>
