@@ -32,6 +32,12 @@ const sttData = {
         "Essential for words with non-standard pronunciations (e.g., acronyms like 'CNTK'). This file explicitly maps the written form to its spoken form (e.g., `CNTK {TAB} c n t k`).",
       kind: "Pronunciation",
     },
+    tertiarySolution: {
+      name: "Terminology",
+      details:
+        'Improve recognition accuracy on industry-specific domains, such as medical terminology, financial, proper nouns, or IT jargon. Examples: Dinosaur names — "Colepiocephale, Piatnitzkysaurus, Yamaceratops, Bambiraptor, Linhenykus, Jeholopterus".',
+      kind: "Terminology",
+    },
     metric: {
       name: "Word Error Rate (WER)",
       description:
@@ -140,6 +146,11 @@ const sttDataTableContent = [
     type: "Plain Text",
     func: "Language Model Adaptation: Improves recognition of domain-specific vocabulary and jargon by showing them in context.",
     best: "Use full sentences, not just word lists. Add multiple sentences containing important terms to increase their weight. One utterance per line.",
+  },
+  {
+    type: "Terminology",
+    func: "Domain Vocabulary Curation: Curates industry-specific terms, proper nouns, and acronyms to bias recognition toward in-domain words.",
+    best: "Compile key terms (e.g., medical, financial, IT jargon, product names) and include them repeatedly in diverse, full-sentence Plain Text examples; add Pronunciation entries for non-standard spoken forms.",
   },
   {
     type: "Structured Text (Markdown)",
@@ -361,6 +372,13 @@ function updateSttSolution(problem) {
         data.secondarySolution.kind
       )
     : "";
+  let tertiaryCard = data.tertiarySolution
+    ? createSolutionCard(
+        data.tertiarySolution.name,
+        data.tertiarySolution.details,
+        data.tertiarySolution.kind
+      )
+    : "";
 
   solutionArea.innerHTML = `
                 <div class="space-y-6">
@@ -370,6 +388,7 @@ function updateSttSolution(problem) {
                     </div>
                     ${primaryCard}
                     ${secondaryCard}
+                    ${tertiaryCard}
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-lg">
                     <h4 class="text-xl font-semibold text-center text-slate-800">${data.metric.name} Explained</h4>
