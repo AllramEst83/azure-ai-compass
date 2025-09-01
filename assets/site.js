@@ -38,6 +38,12 @@ const sttData = {
         'Improve recognition accuracy on industry-specific domains, such as medical terminology, financial, proper nouns, or IT jargon. Examples: Dinosaur names — "Colepiocephale, Piatnitzkysaurus, Yamaceratops, Bambiraptor, Linhenykus, Jeholopterus".',
       kind: "Terminology",
     },
+    quaternarySolution: {
+      name: "Phrase List",
+      details:
+        "A lightweight, runtime solution for quick vocabulary enhancement. Provide a .txt file with one word or phrase per line (max 500 words). Applied before each session without requiring full model training. Ideal for temporary, domain-specific terms, names, or industry jargon. Best combined with lexicon for pronunciation guidance.",
+      kind: "Runtime",
+    },
     metric: {
       name: "Word Error Rate (WER)",
       description:
@@ -166,6 +172,11 @@ const sttDataTableContent = [
     type: "Output Formatting",
     func: "Display Text Customization: Defines rules for Inverse Text Normalization (ITN), capitalization, rewrites, and profanity filtering.",
     best: "Use a single text file with sections like `#rewrite`. Powerful for correcting systematic errors or enforcing brand capitalization.",
+  },
+  {
+    type: "Phrase List",
+    func: "Runtime Vocabulary Enhancement: Improves recognition probability of specific words/phrases without model retraining. Applied before each session.",
+    best: "Provide a .txt file with one word or phrase per line (max 500 words). Include important names, jargon, or industry-specific terms. Temporary solution best for smaller, transient vocabularies.",
   },
   {
     type: "Audio Only",
@@ -379,6 +390,13 @@ function updateSttSolution(problem) {
         data.tertiarySolution.kind
       )
     : "";
+  let quaternaryCard = data.quaternarySolution
+    ? createSolutionCard(
+        data.quaternarySolution.name,
+        data.quaternarySolution.details,
+        data.quaternarySolution.kind
+      )
+    : "";
 
   solutionArea.innerHTML = `
                 <div class="space-y-6">
@@ -389,6 +407,7 @@ function updateSttSolution(problem) {
                     ${primaryCard}
                     ${secondaryCard}
                     ${tertiaryCard}
+                    ${quaternaryCard}
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-lg">
                     <h4 class="text-xl font-semibold text-center text-slate-800">${data.metric.name} Explained</h4>
