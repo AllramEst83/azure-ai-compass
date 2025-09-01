@@ -298,3 +298,12 @@ function renderBleuChart(chartData) {
 }
 
 window.showSection = showSection;
+
+console.log(
+  "%cWelcome, Developer!",
+  "color: teal; font-size: 16px; font-weight: bold;"
+);
+console.log(
+  "%cYou seem curious! Feel free to explore and make something awesome.",
+  "color: gray; font-size: 14px;"
+);
